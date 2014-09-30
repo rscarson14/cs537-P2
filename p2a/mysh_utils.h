@@ -7,5 +7,6 @@
 
 
 int parse_input(char *line_buffer, char* tokens[]);
+int execute_command(char* tokens[]);
 
 #endif

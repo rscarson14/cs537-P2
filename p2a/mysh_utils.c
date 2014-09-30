@@ -20,7 +20,7 @@ int parse_input(char *line_buffer, char* tokens[]){
 		index++;
 	}
 	else{
-		return -1;
+		return 0;
 	}
 
 	while((next_token = strtok(NULL, delims)) != NULL){
@@ -32,4 +32,15 @@ int parse_input(char *line_buffer, char* tokens[]){
 	}
 
 	return index;
+}
+
+int execute_command(char* tokens[]){
+	char* command = tokens[0];
+
+	if(!strcmp(command, "exit")){
+		exit(0);
+	}
+	
+	
+	return 0;
 }

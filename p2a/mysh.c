@@ -12,6 +12,7 @@
 #define BUFFER_SIZE 1024
 
 int parse_input(char *line_buffer, char* tokens[]);
+int execute_command(char* tokens[]);
 
 volatile int finished;
 
@@ -38,7 +39,10 @@ int main(int argc, char* argv[]){
 		printf("Buffer = %s\n", line_buffer);
 		num_tokens = parse_input(line_buffer, tokens);
 		printf("Number of tokens = %d\n", num_tokens);
-		command = tokens[0];
+		if(num_tokens > 0){
+			printf("Command: %s\n", tokens[0]);
+			execute_command(tokens);
+		}
 	}
 	
 	return 0;
