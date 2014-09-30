@@ -9,24 +9,31 @@
 #include <string.h> 
 #include "mysh_utils.h"
 
-#define BUFFER_SIZE 1024
+#define BUFFER_SIZE 	(1024)
+
+#define RET_ERROR 	(-1)
+#define RET_EXIT	(1)
+#define RET_OK		(0)
 
 int parse_input(char *line_buffer, char* tokens[]);
 int execute_command(char* tokens[], int num_tokens);
 
-volatile int finished;
+//volatile int finished;
 
 int main(int argc, char* argv[]){
 	
 	int length;
 	int num_tokens;
+	int retval;
+
 	char line_buffer[1024];
 	char* tokens[1024];
 	const char *prompt = "mysh> ";
 	char* command;
-	finished = 0;
 
-	while(!finished){
+	//finished = 0;
+
+	while(1){
 		printf("%s", prompt);
 		fgets(line_buffer, BUFFER_SIZE, stdin);
 
@@ -36,12 +43,25 @@ int main(int argc, char* argv[]){
 			line_buffer[length] = '\0';
 		}
 
-		printf("Buffer = %s\n", line_buffer);
+		//printf("Buffer = %s\n", line_buffer);
 		num_tokens = parse_input(line_buffer, tokens);
-		printf("Number of tokens = %d\n", num_tokens);
+		//printf("Number of tokens = %d\n", num_tokens);
 		if(num_tokens > 0){
-			printf("Command: %s\n", tokens[0]);
-			execute_command(tokens, num_tokens);
+			//printf("Command: %s\n", tokens[0]);
+			retval = execute_command(tokens, num_tokens);
+			switch(retval){
+				case RET_ERROR:
+					fprintf(stderr, "Error!\n");
+					break;
+				case RET_EXIT:
+					//printf("Exiting...\n");
+					exit(0);
+					break;
+				case RET_OK:
+					break;
+				default:
+					break;
+			}
 		}
 	}
 	

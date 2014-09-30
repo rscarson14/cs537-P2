@@ -7,3 +7,6 @@ mysh.o: mysh.c
 
 mysh_utils.o: mysh_utils.c
 	gcc -c mysh_utils.c -Wall -O
+
+clean:
+	rm *.o
