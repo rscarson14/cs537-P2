@@ -58,7 +58,7 @@ int execute_command(char* tokens[], int num_tokens){
 
 	// Check the simplest command that requires no redirection/piping/etc
 	if(!strcmp(command, "exit")){		
-		return 1;
+		return RET_EXIT;
 	}
 	// Check the next simplest command that requires no redirection/piping/etc
 	else if(!strcmp(command, "cd")){
@@ -75,15 +75,19 @@ int execute_command(char* tokens[], int num_tokens){
 		redir_overwrite = 1;
 		redir = fopen(tokens[num_tokens - 1], "w"); 
 		if(redir == NULL){
-			retval = -1; // error
-			return -1;
+			return RET_ERROR;
 		}
 		child = fork();
 		if(child != 0){
 			waitpid(child, &status, 0);
+			return RET_OK;
 		}
 		else{
-			dup2(fileno(stdout), fileno(redir));
+			dup2(fileno(redir), fileno(stdout));
+			tokens[num_tokens -  2] = NULL;
+			execvp(command, tokens);
+			return RET_ERROR;
+
 		}
 	}
 	else if(!strcmp(tokens[num_tokens -2], ">>")){
@@ -91,8 +95,7 @@ int execute_command(char* tokens[], int num_tokens){
 		redir_append = 1;
 		redir = fopen(tokens[num_tokens - 1], "wa");
 		if(redir == NULL){
-			retval = -1; // error
-			return -1;
+			return RET_ERROR;
 		}
 	}
 	else if((pipe_index = find_pipe(tokens, num_tokens)) > -1){ // Search for pipe '|'
@@ -106,7 +109,7 @@ int execute_command(char* tokens[], int num_tokens){
 		else{
 			tokens[num_tokens] = NULL;
 			execvp(command, tokens);
-			exit(-1);
+			return RET_ERROR;
 		}
 	}
 	

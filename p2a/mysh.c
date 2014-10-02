@@ -11,12 +11,8 @@
 
 #define BUFFER_SIZE 	(1024)
 
-#define RET_ERROR 	(-1)
-#define RET_EXIT	(1)
-#define RET_OK		(0)
-
-int parse_input(char *line_buffer, char* tokens[]);
-int execute_command(char* tokens[], int num_tokens);
+//int parse_input(char *line_buffer, char* tokens[]);
+//int execute_command(char* tokens[], int num_tokens);
 
 //volatile int finished;
 
